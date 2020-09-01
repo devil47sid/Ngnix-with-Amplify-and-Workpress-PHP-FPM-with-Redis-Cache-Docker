@@ -20,6 +20,9 @@ RUN unlink /var/log/nginx/access.log \
     && chown nginx /var/log/nginx/*log \
     && chmod 644 /var/log/nginx/*log
 
+# Copy nginx stub_status config
+COPY ./conf.d/stub_status.conf /etc/nginx/conf.d
+
 # API_KEY is required for configuring the NGINX Amplify Agent.
 # It could be your real API key for NGINX Amplify here if you wanted
 # to build your own image to host it in a private registry.
@@ -43,7 +46,7 @@ RUN unlink /var/log/nginx/access.log \
 # variables, and updates /etc/amplify-agent/agent.conf accordingly.
 
 COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod 777 /entrypoint.sh
+
 # TO set/override API_KEY and AMPLIFY_IMAGENAME when starting an instance:
 # docker run --name my-nginx1 -e API_KEY='..effc' -e AMPLIFY_IMAGENAME="service-name" -d nginx-amplify
 

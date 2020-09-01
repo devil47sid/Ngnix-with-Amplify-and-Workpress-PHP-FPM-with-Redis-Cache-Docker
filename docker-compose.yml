@@ -14,8 +14,8 @@ services:
     links:
       - wordpress
     environment:
-      AMPLIFY_IMAGENAME: "${AMPLIFY_IMAGENAME}"
-      API_KEY: "${AMPLIFY_API_KEY}"
+      - AMPLIFY_IMAGENAME="${AMPLIFY_IMAGENAME}"
+      - API_KEY="${AMPLIFY_API_KEY}"
     restart: always
 
   wordpress:
