@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   nginx:
-    image: devil47/engineerthink:nginx-amplify
+    image: devil47/nginx:latest
     container_name: nginx
     ports:
       - '80:80'

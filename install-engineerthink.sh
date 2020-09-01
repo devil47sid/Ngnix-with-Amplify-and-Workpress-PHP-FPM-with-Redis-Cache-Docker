@@ -8,7 +8,7 @@ sudo apt install apt-transport-https ca-certificates curl software-properties-co
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 #Add the Docker repository to APT sources
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
 
 #update the package database with the Docker packages from the newly added repo
 sudo apt update -y
@@ -16,10 +16,10 @@ sudo apt update -y
 #Install Docker
 sudo apt install docker-ce -y
 
-#install docker compose 
+#install docker compose
 sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 sudo chmod +x /usr/local/bin/docker-compose
 
-#Start docker-compose 
-sudo docker-compose up -d 
+#Start docker-compose
+sudo docker-compose up -d
