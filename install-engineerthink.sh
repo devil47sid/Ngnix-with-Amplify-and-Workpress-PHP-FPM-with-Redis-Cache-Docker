@@ -21,5 +21,11 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-
 
 sudo chmod +x /usr/local/bin/docker-compose
 
+#Create required folders
+mkdir -p logs/nginx
+mkdir -p wordpress
+mkdir -p mariadb
+mkdir -p redis
+
 #Start docker-compose
 sudo docker-compose up -d
