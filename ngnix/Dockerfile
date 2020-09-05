@@ -1,5 +1,5 @@
 FROM nginx:latest
-MAINTAINER NGINX Amplify Engineering
+MAINTAINER NGINX Amplify Engineering (Copied from Ngnix Repo)
 
 # Install the NGINX Amplify Agent
 RUN apt-get update \
