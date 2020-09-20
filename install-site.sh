@@ -150,14 +150,16 @@ is_executed(){
 }
 
 install(){
-  #Creating checkpoint file
-  touch $CHECKPOINT_FILE
+  if [[ "$1" == "Y" ]]; then
+    #Creating checkpoint file
+    touch $CHECKPOINT_FILE
 
-  #Getting Intalltion Details
-  get_installation_details
+    #Getting Intalltion Details
+    get_installation_details
 
-  #Generate .env file
-  generate_env_file
+    #Generate .env file
+    generate_env_file
+  fi
 
   echo -e "\n<======== Starting Site installation ========>\n"
 
@@ -202,16 +204,21 @@ EOF
 
 echo -e "\nPlease choose options: "
 echo "1: Install New Site"
-echo "2: Reset"
+echo "2: Continue Previous Installtion"
+echo "3: Reset"
 while :
 do
   read -p 'Enter: ' -r INPUT_STRING
   case $INPUT_STRING in
 	1)
-		install
+		install "Y"
     break;
 		;;
-	2)
+  2)
+  	install
+    break;
+  	;;
+	3)
 	  reset
 		break
 		;;
