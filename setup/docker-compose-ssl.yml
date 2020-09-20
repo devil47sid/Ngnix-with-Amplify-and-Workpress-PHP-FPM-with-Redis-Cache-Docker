@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  nginx:
+    image: devil47/nginx:latest
+    container_name: nginx
+    ports:
+      - '80:80'
+    volumes:
+      - ./configurations/nginx/conf.d:/etc/nginx/conf.d
+      - ./configurations/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./logs/nginx:/var/log/nginx
+      - ./wordpress:/var/www/html
+    links:
+      - wordpress
+    environment:
+      - AMPLIFY_IMAGENAME=${AMPLIFY_IMAGENAME}
+      - API_KEY=${AMPLIFY_API_KEY}
+    restart: always
+
+  wordpress:
+    image: wordpress:fpm
+    container_name: wordpress
+    volumes:
+      - ./wordpress:/var/www/html
+      - ./configurations/php/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      - WORDPRESS_DB_HOST=mariadb
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+      - WORDPRESS_DB_PASSWORD=${DB_ROOT_PASSWORD}
+      - WORDPRESS_DB_NAME=${DB_NAME}
+    links:
+      - redis
+      - mariadb
+    restart: always
+
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+    restart: always
+
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+       - ./redis:/data
+       - ./configurations/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    entrypoint: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
