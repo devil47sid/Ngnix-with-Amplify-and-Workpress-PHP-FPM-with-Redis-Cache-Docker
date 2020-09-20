@@ -27,10 +27,12 @@ services:
       - ./wordpress:/var/www/html
       - ./configurations/php/php.ini:/usr/local/etc/php/php.ini
     environment:
-      - WORDPRESS_DB_HOST=mariadb
-      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
-      - WORDPRESS_DB_PASSWORD=${DB_ROOT_PASSWORD}
-      - WORDPRESS_DB_NAME=${DB_NAME}
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_ROOT_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_REDIS_HOST', 'redis' );
     links:
       - redis
       - mariadb
