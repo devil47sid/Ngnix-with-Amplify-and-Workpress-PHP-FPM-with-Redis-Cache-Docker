@@ -73,7 +73,7 @@ setup_ssl_site(){
   if [[ "$is_setup_ssl_site" == "false" ]]; then
     install_certbot "$1"
     #Generate certificates
-    sudo certbot certonly --standalone --preferred-challenges http -d "$1" &&
+    sudo certbot certonly --standalone --preferred-challenges http -d "$1" --post-hook "sudo docker exec -it nginx nginx -s reload" &&
     cp setup/docker-compose-ssl.yml docker-compose.yml &&
     cp setup/wordpress-ssl.conf configurations/nginx/conf.d/ &&
     sed -i 's/domain/'$1'/g' configurations/nginx/conf.d/wordpress-ssl.conf &&
@@ -129,6 +129,7 @@ AMPLIFY_IMAGENAME=$ngnix_amplify_image_name
 AMPLIFY_API_KEY=$ngnix_amplify_key
 WORDPRESS_DB_USER=root
 EOF
+cp .env .env.$(date "+%Y.%m.%d-%H.%M.%S")
 }
 
 checkpoint(){
@@ -173,8 +174,10 @@ install(){
     setup_site
   fi
 
-  #Start docker-compose
-  #sudo docker-compose up -d
+  Start docker-compose
+  sudo docker-compose up -d
+
+  echo "Installtion is completed successfully!"
 }
 
 reset(){
