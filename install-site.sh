@@ -67,6 +67,14 @@ install_certbot(){
 
 }
 
+clean_up(){
+  rm -rf wordpress
+  rm -rf mariadb
+  rm -rf redis
+  rm -rf configurations/nginx/conf.d/wordpress*
+  rm -rf .env
+}
+
 setup_ssl_site(){
   echo -e "\n<======== Setting up SSL ========>\n"
   is_setup_ssl_site=$(is_executed setup_ssl_site)
@@ -128,6 +136,7 @@ DB_NAME=$wordpress_db_name
 AMPLIFY_IMAGENAME=$ngnix_amplify_image_name
 AMPLIFY_API_KEY=$ngnix_amplify_key
 WORDPRESS_DB_USER=root
+IS_SSL=$is_ssl_setup_required
 EOF
 cp .env .env.$(date "+%Y.%m.%d-%H.%M.%S")
 }
@@ -151,8 +160,12 @@ is_executed(){
 
 install(){
   if [[ "$1" == "Y" ]]; then
+    reset
     #Creating checkpoint file
     touch $CHECKPOINT_FILE
+
+    #Clean up old installation
+    clean_up
 
     #Getting Intalltion Details
     get_installation_details
@@ -169,6 +182,7 @@ install(){
   #Create Required folders
   crete_site_folders
 
+  is_ssl_setup_required=$(grep -i "IS_SSL" .env | sed 's|.*=||')
   #Configuration Setup
   if [[ "$is_ssl_setup_required" == "Y" ]]; then
     setup_ssl_site $domain_name
@@ -179,7 +193,12 @@ install(){
   #Start docker-compose
   sudo docker-compose up -d
 
-  echo "Installtion is completed successfully!"
+  if [ $? -eq 0 ]; then
+    echo "Installtion is completed successfully!"
+  else
+   echo "Installtion Failed! Please retry"
+  fi
+
 }
 
 reset(){
