@@ -176,7 +176,7 @@ install(){
     setup_site
   fi
 
-  Start docker-compose
+  #Start docker-compose
   sudo docker-compose up -d
 
   echo "Installtion is completed successfully!"
